@@ -20,9 +20,9 @@ jobs:
     runs-on: <%= ubuntu_version %>
     steps:
       @import smartlyio/steps/js/basic
-      - name: Type Verification
-        run: yarn tsc --noEmit
-      - name: Run Tests (Unit & Integration)
+      - name: Build
+        run: yarn run build
+      - name: Run Tests
         run: yarn test --forceExit
         env:
           NODE_ENV: test
@@ -31,7 +31,9 @@ jobs:
     runs-on: <%= ubuntu_version %>
     steps:
       @import smartlyio/steps/js/basic
-      - name: Build js package
+      - name: Build
+        run: yarn run build
+      - name: Package
         run: yarn run package
       - name: Verify no changes to built files
         run: |
