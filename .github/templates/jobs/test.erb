@@ -1,0 +1,27 @@
+test:
+  runs-on: <%= ubuntu_version %>
+  steps:
+    @import ../smartlyio/steps/js/basic
+<%- if not test_skip_lint -%>
+    - name: Run Linting Tools
+      run: yarn lint
+<%- end -%>
+    - name: Type Verification
+      run: yarn tsc --noEmit
+    - name: Run Tests (Unit & Integration)
+      run: yarn test --forceExit
+      env:
+        NODE_ENV: test
+
+package:
+  runs-on: <%= ubuntu_version %>
+  steps:
+    @import ../smartlyio/steps/js/basic
+    - name: Build js package
+      run: yarn run package
+    - name: Verify no changes to built files
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+            echo "Package was not built before commit/push"
+            exit 1
+        fi

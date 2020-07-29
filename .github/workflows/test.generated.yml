@@ -1,0 +1,103 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Read .node-version
+        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
+        id: node-version
+      - name: Setup node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - name: yarn install
+        run: yarn run ci:install
+      - name: Run Linting Tools
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Read .node-version
+        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
+        id: node-version
+      - name: Setup node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - name: yarn install
+        run: yarn run ci:install
+      - name: Type Verification
+        run: yarn tsc --noEmit
+      - name: Run Tests (Unit & Integration)
+        run: yarn test --forceExit
+        env:
+          NODE_ENV: test
+  
+  package:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Read .node-version
+        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
+        id: node-version
+      - name: Setup node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - name: yarn install
+        run: yarn run ci:install
+      - name: Build js package
+        run: yarn run package
+      - name: Verify no changes to built files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+              echo "Package was not built before commit/push"
+              exit 1
+          fi
+
+  test-docker-image:
+    needs: test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test building the actual image
+        run: docker build -t testing/typescript-nodejs-smartly-starter:latest .

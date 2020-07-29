@@ -1,0 +1,27 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: <%= ubuntu_version %>
+    steps:
+      @import smartlyio/steps/js/basic
+      - name: Run Linting Tools
+        run: yarn lint
+
+  @import ./jobs/test (test_skip_lint: true)
+
+  test-docker-image:
+    needs: test
+    runs-on: <%= ubuntu_version %>
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test building the actual image
+        run: docker build -t testing/typescript-nodejs-smartly-starter:latest .
