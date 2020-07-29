@@ -5261,7 +5261,7 @@ function postWebhook(webhookUrl, webhookAuth, serializedPayload, signature) {
                 'x-gitHub-delivery': `${github.context.runNumber}`,
                 'x-github-event': `${github.context.eventName}`,
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${webhookAuth}`
+                Authorization: `Bearer ${webhookAuth}`
             }
         });
     });
