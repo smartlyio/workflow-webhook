@@ -26,7 +26,10 @@ export function buildPayload(data: Record<string, unknown>): WebhookPayload {
   return payload;
 }
 
-export function signPayload(serializedPayload: string, webhookSecret: string): string {
+export function signPayload(
+  serializedPayload: string,
+  webhookSecret: string
+): string {
   return createHmac('sha1', webhookSecret)
     .update(serializedPayload)
     .digest('hex');
@@ -38,14 +41,14 @@ export async function postWebhook(
   serializedPayload: string,
   signature: string
 ): Promise<void> {
-  await axios.post(webhookUrl, serializedPayload , {
+  await axios.post(webhookUrl, serializedPayload, {
     headers: {
       'User-Agent': 'smartlyio-workflow-webhook',
       'x-hub-signature': signature,
       'x-gitHub-delivery': `${github.context.runNumber}`,
       'x-github-event': `${github.context.eventName}`,
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${webhookAuth}`
+      Authorization: `Bearer ${webhookAuth}`
     }
   });
 }

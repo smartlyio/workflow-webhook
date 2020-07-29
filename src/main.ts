@@ -1,5 +1,10 @@
 import * as core from '@actions/core';
-import { buildPayload, signPayload, postWebhook, WebhookPayload } from './webhook';
+import {
+  buildPayload,
+  signPayload,
+  postWebhook,
+  WebhookPayload
+} from './webhook';
 
 async function run(): Promise<void> {
   try {
@@ -22,4 +27,4 @@ async function run(): Promise<void> {
   }
 }
 
-run()
+run();

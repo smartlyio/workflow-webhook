@@ -21,11 +21,11 @@ describe('Posting the webhook', () => {
     const payload = '{"key": "text"}';
     const signature = '2290772a7257c2b70241fa18321f4c5357cf5c0d';
 
-    axiosMock.onPost(webhookUrl).reply((config) => {
+    axiosMock.onPost(webhookUrl).reply(config => {
       const {
         'Content-Type': contentType,
         'x-hub-signature': actualSignature,
-        'Authorization': authorization
+        Authorization: authorization
       } = config.headers;
       expect(contentType).toBe('application/json');
       expect(actualSignature).toBe(signature);
