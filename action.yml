@@ -1,11 +1,19 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Webhook notify action'
+description: 'Send a payload to a webhook'
+author: 'Smartly.io'
 inputs:
-  milliseconds: # change this
+  webhook_url:
+    description: 'The HTTP URI of the webhook endpoint to invoke'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  webhook_secret:
+    description: 'The secret with which to generate the signature hash'
+    required: true
+  webhook_auth:
+    description: 'Credentials to be used for Bearer token authentication'
+    required: true
+  data:
+    description: 'Extra webhook payload, included under a "data" key'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
