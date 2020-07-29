@@ -1,19 +1,30 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from '@actions/core';
+import {
+  buildPayload,
+  signPayload,
+  postWebhook,
+  WebhookPayload
+} from './webhook';
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const webhookUrl: string = core.getInput('webhook_url');
+    const webhookSecret: string = core.getInput('webhook_secret');
+    const webhookAuth: string = core.getInput('webhook_auth');
+    const data: Record<string, unknown> = JSON.parse(core.getInput('data'));
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const payload: WebhookPayload = buildPayload(data);
+    const serializedPayload: string = JSON.stringify(payload);
+    const signature: string = signPayload(serializedPayload, webhookSecret);
 
-    core.setOutput('time', new Date().toTimeString())
+    await postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
   } catch (error) {
-    core.setFailed(error.message)
+    if (error.response.status == 400) {
+      core.setFailed(JSON.stringify(error.response.data));
+    } else {
+      core.setFailed(error.message);
+    }
   }
 }
 
-run()
+run();
