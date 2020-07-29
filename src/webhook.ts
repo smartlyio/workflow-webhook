@@ -13,7 +13,7 @@ export interface WebhookPayload {
   };
 }
 
-export async function buildPayload(data: Record<string, unknown>): Promise<WebhookPayload> {
+export function buildPayload(data: Record<string, unknown>): WebhookPayload {
   const { owner, repo } = github.context.repo;
   const payload: WebhookPayload = {
     repository: `${owner}/${repo}`,
@@ -38,7 +38,7 @@ export async function postWebhook(
   serializedPayload: string,
   signature: string
 ): Promise<void> {
-  await axios.post(webhookUrl, {
+  await axios.post(webhookUrl, serializedPayload , {
     headers: {
       'User-Agent': 'smartlyio-workflow-webhook',
       'x-hub-signature': signature,
@@ -46,7 +46,6 @@ export async function postWebhook(
       'x-github-event': `${github.context.eventName}`,
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${webhookAuth}`
-    },
-    data: serializedPayload
+    }
   });
 }

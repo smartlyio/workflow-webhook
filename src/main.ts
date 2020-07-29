@@ -8,13 +8,17 @@ async function run(): Promise<void> {
     const webhookAuth: string = core.getInput('webhook_auth');
     const data: Record<string, unknown> = JSON.parse(core.getInput('data'));
 
-    const payload: WebhookPayload = await buildPayload(data);
+    const payload: WebhookPayload = buildPayload(data);
     const serializedPayload: string = JSON.stringify(payload);
     const signature: string = signPayload(serializePayload, webhookSecret);
 
     await postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
   } catch (error) {
-    core.setFailed(error.message)
+    if (error.response.status == 400) {
+      core.setFailed(JSON.stringify(error.response.data));
+    } else {
+      core.setFailed(error.message);
+    }
   }
 }
 
