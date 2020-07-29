@@ -10,7 +10,7 @@ async function run(): Promise<void> {
 
     const payload: WebhookPayload = buildPayload(data);
     const serializedPayload: string = JSON.stringify(payload);
-    const signature: string = signPayload(serializePayload, webhookSecret);
+    const signature: string = signPayload(serializedPayload, webhookSecret);
 
     await postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
   } catch (error) {
