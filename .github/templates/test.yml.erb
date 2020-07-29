@@ -16,12 +16,26 @@ jobs:
       - name: Run Linting Tools
         run: yarn lint
 
-  @import ./jobs/test (test_skip_lint: true)
-
-  test-docker-image:
-    needs: test
+  test:
     runs-on: <%= ubuntu_version %>
     steps:
-      - uses: actions/checkout@v2
-      - name: Test building the actual image
-        run: docker build -t testing/typescript-nodejs-smartly-starter:latest .
+      @import smartlyio/steps/js/basic
+      - name: Type Verification
+        run: yarn tsc --noEmit
+      - name: Run Tests (Unit & Integration)
+        run: yarn test --forceExit
+        env:
+          NODE_ENV: test
+   
+  package:
+    runs-on: <%= ubuntu_version %>
+    steps:
+      @import smartlyio/steps/js/basic
+      - name: Build js package
+        run: yarn run package
+      - name: Verify no changes to built files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+              echo "Package was not built before commit/push"
+              exit 1
+          fi
