@@ -28,7 +28,7 @@ describe('Posting the webhook', () => {
         Authorization: authorization
       } = config.headers;
       expect(contentType).toBe('application/json');
-      expect(actualSignature).toBe(signature);
+      expect(actualSignature).toBe(`sha1=${signature}`);
       expect(authorization).toBe(`Bearer ${webhookAuth}`);
       expect(config.data).toBe(payload);
       return [200, { channel: { ok: true } }];
