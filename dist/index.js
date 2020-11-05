@@ -5322,7 +5322,7 @@ function postWebhook(webhookUrl, webhookAuth, serializedPayload, signature) {
         yield axios_1.default.post(webhookUrl, serializedPayload, {
             headers: {
                 'User-Agent': 'smartlyio-workflow-webhook',
-                'x-hub-signature': signature,
+                'x-hub-signature': `sha1=${signature}`,
                 'x-gitHub-delivery': `${github.context.runNumber}`,
                 'x-github-event': `${github.context.eventName}`,
                 'Content-Type': 'application/json',
