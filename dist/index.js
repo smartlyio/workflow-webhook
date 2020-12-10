@@ -1371,7 +1371,7 @@ function run() {
             yield webhook_1.postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
         }
         catch (error) {
-            if (error.response.status == 400) {
+            if (error && error.response && error.response.status == 400) {
                 core.setFailed(JSON.stringify(error.response.data));
             }
             else {
