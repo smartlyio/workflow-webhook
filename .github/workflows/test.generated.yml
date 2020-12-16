@@ -26,7 +26,7 @@ jobs:
         run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
         id: node-version
       - name: Setup node version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
       - uses: actions/cache@v2
@@ -50,7 +50,7 @@ jobs:
         run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
         id: node-version
       - name: Setup node version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
       - uses: actions/cache@v2
@@ -78,7 +78,7 @@ jobs:
         run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo '12.16.3')
         id: node-version
       - name: Setup node version
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
       - uses: actions/cache@v2
