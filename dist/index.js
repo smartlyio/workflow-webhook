@@ -44,10 +44,11 @@ function run() {
             const webhookSecret = core.getInput('webhook_secret');
             const webhookAuth = core.getInput('webhook_auth');
             const data = JSON.parse(core.getInput('data'));
-            const payload = webhook_1.buildPayload(data);
+            const payload = (0, webhook_1.buildPayload)(data);
             const serializedPayload = JSON.stringify(payload);
-            const signature = webhook_1.signPayload(serializedPayload, webhookSecret);
-            yield webhook_1.postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
+            const signature = (0, webhook_1.signPayload)(serializedPayload, webhookSecret);
+            yield (0, webhook_1.postWebhook)(webhookUrl, webhookAuth, serializedPayload, signature);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
         catch (error) {
             if (error && error.response && error.response.status == 400) {
@@ -119,7 +120,7 @@ function buildPayload(data) {
 }
 exports.buildPayload = buildPayload;
 function signPayload(serializedPayload, webhookSecret) {
-    return crypto_1.createHmac('sha1', webhookSecret)
+    return (0, crypto_1.createHmac)('sha1', webhookSecret)
         .update(serializedPayload)
         .digest('hex');
 }
