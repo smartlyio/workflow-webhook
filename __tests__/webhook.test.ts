@@ -47,7 +47,7 @@ describe('Posting the webhook', () => {
 
     try {
       await postWebhook(webhookUrl, webhookAuth, payload, signature);
-    } catch (error) {
+    } catch (error: any) {
       expect(error.response.status).toBe(400);
       expect(error.response.data).toStrictEqual({ error: 'Signature failed' });
     }

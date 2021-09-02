@@ -18,7 +18,8 @@ async function run(): Promise<void> {
     const signature: string = signPayload(serializedPayload, webhookSecret);
 
     await postWebhook(webhookUrl, webhookAuth, serializedPayload, signature);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     if (error && error.response && error.response.status == 400) {
       core.setFailed(JSON.stringify(error.response.data));
     } else {
