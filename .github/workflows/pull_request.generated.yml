@@ -53,7 +53,7 @@ jobs:
     - name: Test executing the action
       uses: ./
       with:
-        webhook_url: http://httpbin:8080/post
+        webhook_url: http://localhost:8080/post
         webhook_secret: supersecret
         webhook_auth: othersecret
         data: '{"my-key": "my-value"}'
