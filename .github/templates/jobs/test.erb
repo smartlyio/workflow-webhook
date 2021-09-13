@@ -4,7 +4,7 @@ test:
     httpbin:
       image: kennethreitz/httpbin
       ports:
-      - 80:8080
+      - 8080:80
   steps:
   - uses: actions/checkout@v2
   - name: "Build action for test"
