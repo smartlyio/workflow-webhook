@@ -1,0 +1,59 @@
+# IMPORTANT NOTE/WARNING!
+# Do not make changes to this file, your changes will be overwritten.
+#
+# This file is automagically generated from:
+# - .github/templates/pull_request.yml.erb
+# - Templates contained in the smartlyio/github-actions-templates repository
+#
+# This file can be updated by editing the template file, and running `devbox render workflows`
+
+name: "Pull Request"
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Install"
+      run: |
+        npm install
+    - name: "Prettier"
+      run: |
+        npm run format-check
+    - name: "Lint"
+      run: |
+        npm run lint
+    - name: "Test"
+      run: |
+        npm run test
+    - name: "build"
+      run: |
+        npm run build
+        npm run package
+
+  test:
+    runs-on: ubuntu-18.04
+    services:
+      httpbin:
+        image: kennethreitz/httpbin
+        ports:
+        - 8080:80
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Build action for test"
+      run: |
+        npm install
+        npm run build
+        npm run package
+        git clean -fXd
+    - name: Test executing the action
+      uses: ./
+      with:
+        webhook_url: http://localhost:8080/post
+        webhook_secret: supersecret
+        webhook_auth: othersecret
+        data: '{"my-key": "my-value"}'

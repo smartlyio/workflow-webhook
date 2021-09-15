@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "1.0.0",
+  "name": "workflow-webhook",
+  "version": "1.1.1",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "A webhook action",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -11,18 +11,16 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "all": "yarn run build && yarn run format && yarn run lint && yarn run package && yarn test",
-    "ci:install": "yarn install --frozen-lockfile --link-duplicates --silent"
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test",
+    "version": "npm run build && npm run package && git add -- dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/smartlyio/workflow-webhook.git"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "webhook"
   ],
   "author": "",
   "license": "MIT",

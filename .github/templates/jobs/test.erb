@@ -1,0 +1,22 @@
+test:
+  runs-on: <%= ubuntu_version %>
+  services:
+    httpbin:
+      image: kennethreitz/httpbin
+      ports:
+      - 8080:80
+  steps:
+  - uses: actions/checkout@v2
+  - name: "Build action for test"
+    run: |
+      npm install
+      npm run build
+      npm run package
+      git clean -fXd
+  - name: Test executing the action
+    uses: ./
+    with:
+      webhook_url: http://localhost:8080/post
+      webhook_secret: supersecret
+      webhook_auth: othersecret
+      data: '{"my-key": "my-value"}'
