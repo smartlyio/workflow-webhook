@@ -26,7 +26,7 @@ describe('Posting the webhook', () => {
         'Content-Type': contentType,
         'x-hub-signature': actualSignature,
         Authorization: authorization
-      } = config.headers;
+      } = config.headers as Record<string, string>;
       expect(contentType).toBe('application/json');
       expect(actualSignature).toBe(`sha1=${signature}`);
       expect(authorization).toBe(`Bearer ${webhookAuth}`);
