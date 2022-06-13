@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/jest": "27.5.2",
     "@types/node": "16.11.39",
-    "@typescript-eslint/parser": "5.27.1",
+    "@typescript-eslint/parser": "5.28.0",
     "@vercel/ncc": "0.33.4",
     "axios-mock-adapter": "1.21.1",
     "eslint": "8.17.0",
