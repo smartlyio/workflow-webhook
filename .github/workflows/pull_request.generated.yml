@@ -17,9 +17,9 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Set Node.js 16.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
         node-version: 16.x
     - name: "Install"
@@ -47,9 +47,9 @@ jobs:
         ports:
         - 8080:80
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Set Node.js 16.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
         node-version: 16.x
     - name: "Build action for test"
@@ -65,3 +65,20 @@ jobs:
         webhook_secret: supersecret
         webhook_auth: othersecret
         data: '{"my-key": "my-value"}'
+
+  release:
+    runs-on: ubuntu-20.04
+    name: "Build and release action (dry-run)"
+    needs: [build, test-]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Configure git
+        uses: smartlyio/github-actions@git-init-userinfo-v1
+      - name: Release flow
+        uses: smartlyio/github-actions@release-action-node-v1
+        with:
+          dry_run: true
+          token: "${{ secrets.GITHUB_TOKEN }}"
