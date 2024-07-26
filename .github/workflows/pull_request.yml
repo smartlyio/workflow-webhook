@@ -1,4 +1,4 @@
-name: "Pull Request"
+name: Pull Request
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
 
   release:
     runs-on: ubuntu-22.04
-    name: "Build and release action (dry-run)"
+    name: Build and release action (dry-run)
     needs: [build]
     steps:
       - uses: actions/checkout@v4

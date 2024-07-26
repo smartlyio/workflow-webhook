@@ -12,7 +12,7 @@ jobs:
 
   release:
     runs-on: ubuntu-22.04
-    name: "Build and release action"
+    name: Build and release action
     needs: [build]
     steps:
       - uses: actions/checkout@v4

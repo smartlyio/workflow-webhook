@@ -10,19 +10,19 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version-file: package.json
-    - name: "Install"
+    - name: Install
       run: |
         npm install
-    - name: "Prettier"
+    - name: Prettier
       run: |
         npm run format-check
-    - name: "Lint"
+    - name: Lint
       run: |
         npm run lint
-    - name: "Test"
+    - name: Test
       run: |
         npm run test
-    - name: "build"
+    - name: build
       run: |
         npm run build
         npm run package
@@ -39,7 +39,7 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version-file: package.json
-    - name: "Build action for test"
+    - name: Build action for test
       run: |
         npm install
         npm run build
