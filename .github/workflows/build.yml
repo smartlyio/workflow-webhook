@@ -1,0 +1,54 @@
+name: Build
+on:
+  workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: package.json
+    - name: Install
+      run: |
+        npm install
+    - name: Prettier
+      run: |
+        npm run format-check
+    - name: Lint
+      run: |
+        npm run lint
+    - name: Test
+      run: |
+        npm run test
+    - name: build
+      run: |
+        npm run build
+        npm run package
+
+  test:
+    runs-on: ubuntu-22.04
+    services:
+      httpbin:
+        image: kennethreitz/httpbin
+        ports:
+        - 8080:80
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: package.json
+    - name: Build action for test
+      run: |
+        npm install
+        npm run build
+        npm run package
+        git clean -fXd
+    - name: Test executing the action
+      uses: ./
+      with:
+        webhook_url: http://localhost:8080/post
+        webhook_secret: supersecret
+        webhook_auth: othersecret
+        data: '{"my-key": "my-value"}'
