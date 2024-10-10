@@ -15,5 +15,5 @@ inputs:
     description: 'Extra webhook payload, included under a "data" key'
     required: true
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
