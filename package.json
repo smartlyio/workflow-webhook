@@ -27,7 +27,7 @@
   "dependencies": {
     "@actions/core": "1.11.1",
     "@actions/github": "6.0.0",
-    "axios": "0.28.0"
+    "axios": "0.28.1"
   },
   "devDependencies": {
     "@types/jest": "29.5.13",
