@@ -49,6 +49,17 @@
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["major"],
       "labels": ["patch", "renovate-deps"]
+    },
+    {
+      "matchUpdateTypes": ["pin", "pinDigest"],
+      "minimumReleaseAge": null,
+      "automerge": true
+    },
+    {
+      "description": "Pin GitHub Actions to commit SHAs only for third-party repos (not Smartly-owned)",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["/^smartlyio\\//"],
+      "pinDigests": false
     }
   ],
   "github-actions": {
