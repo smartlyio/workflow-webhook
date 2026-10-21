@@ -22,8 +22,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
       - name: Configure git
-        uses: smartlyio/github-actions@git-init-userinfo-v1
+        uses: smartlyio/github-actions-private@git-init-userinfo-v1
       - name: Release flow
-        uses: smartlyio/github-actions@release-action-node-v1
+        uses: smartlyio/github-actions-private@release-action-node-v1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
